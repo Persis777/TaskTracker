@@ -1,0 +1,17 @@
+{
+  "name": "tasktracker",
+  "version": "1.0.0",
+  "description": "This document provides commands and links for managing project for develop",
+  "main": "index.js",
+  "scripts": {
+    "start:db": "docker-compose -f docker-compose.yaml up db --build",
+    "stop:db": "docker-compose -f docker-compose.yaml down db",
+    "start:api": "docker-compose -f docker-compose.yaml up api --build",
+    "stop:api": "docker-compose -f docker-compose.yaml down api",
+    "start:client": "docker-compose -f docker-compose.yaml up client --build",
+    "stop:client": "docker-compose -f docker-compose.yaml down client",
+    "clear:db": "docker-compose down --volumes"
+  },
+  "author": "",
+  "license": "ISC"
+}
