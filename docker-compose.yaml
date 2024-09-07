@@ -26,7 +26,7 @@ services:
       - proxy
 
   db:
-    image: mcr.microsoft.com/mssql/server:2 022-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=YourStrong@Passw0rd
