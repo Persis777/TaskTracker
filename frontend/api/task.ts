@@ -1,24 +1,13 @@
-import formatRequest from '@/utils/request';
+import axios from '@/utils/axios';
 import { ITask } from '@/models/Task';
 import { AxiosResponse } from 'axios';
 
-export const getTasks = () => formatRequest({
-  url: '/task',
-  method: 'get'
-});
+export const getAll = async (): Promise<AxiosResponse<ITask[]>> => axios.get('/task');
 
-export const createTask = (payload: ITask): Promise<AxiosResponse<ITask>> => formatRequest({
-  url: '/task',
-  method: 'post'
-}, payload);
+export const getById = async (id: number): Promise<AxiosResponse<ITask>> => axios.get(`/task/${id}`);
 
-export const updateTask = (payload: ITask): Promise<AxiosResponse<ITask>> => formatRequest({
-  url: `/task/${payload.id}`,
-  method: 'put'
-}, payload);
+export const create = async (payload: ITask): Promise<AxiosResponse<ITask>> => axios.post('/task', payload);
 
-export const deleteTask = (id: number): Promise<AxiosResponse<boolean>> => formatRequest({
-  url: `/task/${id}`,
-  method: 'delete'
-});
+export const update = async (id: number, payload: ITask): Promise<AxiosResponse<ITask>> => axios.put(`/task/${id}`, payload);
 
+export const deleteTask = async (id: number): Promise<AxiosResponse<void>> => axios.delete(`/task/${id}`);

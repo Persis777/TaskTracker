@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import Header from '@/components/Header';
+import Header from '@/app/Header';
 import React from 'react';
+import ContextMenu from '@/app/ContextMenu';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -25,14 +26,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-6 overflow-hidden max-h-screen max-w-screen`}
-      >
-        <Header />
-        {children}
-      </body>
+    <body
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-screen max-h-screen overflow-hidden`}
+    >
+    <ContextMenu/>
+    <Header/>
+    <div>{children}</div>
+    </body>
     </html>
   );
 }

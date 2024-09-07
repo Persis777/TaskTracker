@@ -18,7 +18,7 @@ export interface ITask {
   id: number | undefined;
   title: string;
   description: string;
-  endDate: string;
+  deadline: string;
   priority: string;
   status: string;
   plan: IPlan;

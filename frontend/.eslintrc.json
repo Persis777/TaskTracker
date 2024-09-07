@@ -12,6 +12,7 @@
     "import/no-extraneous-dependencies": "off",
     "import/extensions": "off",
     "react/button-has-type": "off",
+    "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": [
       1,
       {
