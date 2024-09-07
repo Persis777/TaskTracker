@@ -27,10 +27,10 @@ namespace TaskTracker.Controllers
         .Include(ut => ut.Plan)
         .Select(s => s.ToUserTaskDto())
         .ToListAsync();
-        
+
         return Ok(UserTask);
       }
-      
+
       [HttpGet("{id}")]
       public async Task<ActionResult<UserTaskDto>> GetUserTaskById([FromRoute] int id)
       {
@@ -58,7 +58,7 @@ namespace TaskTracker.Controllers
 
           var toUserTaskDto = userTask.ToUserTaskDto();
 
-          return CreatedAtAction(nameof(GetUserTaskById), new {id = userTask.Id}, userTaskDto);
+          return CreatedAtAction(nameof(GetUserTaskById), new {id = userTask.Id}, toUserTaskDto);
        }
 
        [HttpPut]

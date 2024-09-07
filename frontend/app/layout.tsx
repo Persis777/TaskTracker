@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/app/Header';
 import React from 'react';
 import ContextMenu from '@/app/ContextMenu';
+import Footer from '@/app/Footer';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -31,11 +32,12 @@ export default function RootLayout({
     <html lang="en">
     <body
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-screen max-h-screen overflow-hidden`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900`}
     >
     <ContextMenu/>
     <Header/>
-    <div>{children}</div>
+    {children}
+    <Footer/>
     </body>
     </html>
   );

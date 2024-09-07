@@ -6,21 +6,20 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: app_frontend
-    ports:
-      - "3001:3000"
     depends_on:
       - backend
-      - nginx
+    ports:
+      - "3000:3000"
     networks:
       - app-network
 
   backend:
     build:
-      context: ./backend/
+      context: ./backend
       dockerfile: Dockerfile
     container_name: app_backend
     ports:
-      - "3000:8080"
+      - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=db,1433;Database=Tasks;Encrypt=False;User Id=sa;Password=YourStrong@Passw0rd;
@@ -31,7 +30,7 @@ services:
 
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sql_server
+    container_name: app_db
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=YourStrong@Passw0rd

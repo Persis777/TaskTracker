@@ -15,11 +15,11 @@ export interface IPlan {
 }
 
 export interface ITask {
-  id: number | undefined;
+  id?: number | undefined;
   title: string;
   description: string;
   deadline: string;
   priority: string;
   status: string;
-  plan: IPlan;
+  plan?: IPlan;
 }

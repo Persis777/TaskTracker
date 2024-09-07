@@ -17,8 +17,9 @@ function TaskItem({
   const searchParams = useSearchParams();
 
   const isTaskSelected = useMemo(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams!.toString());
     const id = params.get('id');
+    if (!id) return false;
     return +id === task.id;
   }, [searchParams, task.id]);
 
@@ -27,7 +28,7 @@ function TaskItem({
       className={`text-sm shadow-md p-1 grid grid-cols-2 justify-between items-center gap-4 ${isTaskSelected ? 'bg-gray-500' : 'bg-gray-800'}`}>
       <Link href={`/task?id=${task.id}`}> <span className="font-semibold">{task.title}</span>
       </Link>
-      <span className="text-gray-400 text-right  text-xs">{formatDate(task.deadline)}</span>
+      <span className="text-gray-400 text-right text-xs">{formatDate(task.deadline!)}</span>
     </li>
   );
 }

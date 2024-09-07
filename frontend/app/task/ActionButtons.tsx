@@ -3,14 +3,12 @@
 import api from '@/api';
 import { ITask } from '@/models/Task';
 import { GoPencil, GoTrash } from 'react-icons/go';
-import { redirect } from 'next/navigation';
 
 export default function ActionButtons({
   task
 }: { task: ITask }) {
   const deleteTask = async () => {
-    await api.task.deleteTask(task.id);
-    redirect('/task');
+    await api.task.deleteTask(task.id!);
   };
 
   return (<div className="flex gap-2 justify-end">
