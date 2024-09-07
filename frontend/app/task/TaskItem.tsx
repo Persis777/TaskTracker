@@ -19,7 +19,7 @@ function TaskItem({
   const isTaskSelected = useMemo(() => {
     const params = new URLSearchParams(searchParams.toString());
     const id = params.get('id');
-    return id == task.id;
+    return +id === task.id;
   }, [searchParams, task.id]);
 
   return (

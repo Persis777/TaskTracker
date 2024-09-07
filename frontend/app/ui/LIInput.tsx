@@ -4,7 +4,7 @@ interface Props {
   id: string;
   label: string;
   placeholder: string;
-  onInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onInput: () => void;
   value: string;
 }
 

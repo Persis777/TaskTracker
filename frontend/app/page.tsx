@@ -4,12 +4,8 @@ export default async function Home() {
 
   const links = [
     {
-      title: 'Task',
+      title: 'Tasks',
       href: '/task',
-    },
-    {
-      title: 'Coming soon',
-      href: '/coming',
     },
   ];
 // Main menu, its hub for all pages
