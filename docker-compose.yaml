@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     container_name: app_backend
     ports:
-      - "3000:3000"
+      - "3000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=db,1433;Database=Tasks;Encrypt=False;User Id=sa;Password=YourStrong@Passw0rd;
