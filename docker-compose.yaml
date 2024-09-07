@@ -2,7 +2,6 @@ name: limb
 
 services:
   web:
-    restart: always
     build:
       context: ./client/
       dockerfile: Dockerfile
@@ -14,7 +13,6 @@ services:
       - proxy
 
   api:
-    restart: "unless-stopped"
     build:
       context: ./server/
       dockerfile: Dockerfile
@@ -41,7 +39,6 @@ services:
       - backend
     volumes:
       - sql_data:/var/opt/mssql
-    restart: "no"
 
 volumes:
   sql_data:
