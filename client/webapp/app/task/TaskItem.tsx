@@ -1,18 +1,18 @@
 'use client';
 
-import React, { useMemo } from 'react';
-import { ITask } from '@/models/Task';
-import { formatDate } from '@/app/task/utils/dateFormat';
+import React, {useMemo} from 'react';
+import {ITask} from '@/models/Task';
+import {formatDate} from '@/app/task/utils/dateFormat';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import {useSearchParams} from 'next/navigation';
 
 interface Props {
   task: ITask;
 }
 
 function TaskItem({
-  task
-}: Props) {
+                    task
+                  }: Props) {
 
   const searchParams = useSearchParams();
 

@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import TaskItem from '@/app/task/TaskItem';
-import api from '@/api';
-import { GoPaste } from 'react-icons/go';
+import {GoPaste} from 'react-icons/go';
 
-import { ITask } from '@/models/Task';
+import {ITask} from '@/models/Task';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
+import api from '../../api';
 
 function TaskList() {
   const router = useRouter();
@@ -23,11 +23,11 @@ function TaskList() {
   };
 
   const getTasks = async () => {
-    const { data } = await api.task.getAll();
+    const {data} = await api.task.getAll();
     setTasks(data);
   };
   const createTask = async () => {
-    const { data } = await api.task.create(emptyTask as ITask);
+    const {data} = await api.task.create(emptyTask as ITask);
     if (data.id) router.push(`/task?id=${data.id}`);
     await getTasks();
   };
