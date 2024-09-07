@@ -21,14 +21,18 @@ namespace TaskTracker.Controllers
             _context = context;
         }
       [HttpGet]
-      public async  Task<ActionResult<IEnumerable<UserTask>>> GetUserTasks()
+      public async  Task<ActionResult<IEnumerable<UserTaskDto>>> GetUserTasks()
       {
-        var UserTask = await _context.UserTasks.Select(s => s.ToUserTaskDto()).ToListAsync();
+        var UserTask = await _context.UserTasks
+        .Include(ut => ut.Plan)
+        .Select(s => s.ToUserTaskDto())
+        .ToListAsync();
+        
         return Ok(UserTask);
       }
       
       [HttpGet("{id}")]
-      public async Task<ActionResult<UserTask>> GetUserTaskById([FromRoute] int id)
+      public async Task<ActionResult<UserTaskDto>> GetUserTaskById([FromRoute] int id)
       {
           var userTask = await _context.UserTasks //.FindAsync(id);
           .Include(ut => ut.Plan)
