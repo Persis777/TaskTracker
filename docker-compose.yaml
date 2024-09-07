@@ -33,6 +33,8 @@ services:
       - MSSQL_PID=Express
     expose:
       - "1433"
+      ports:
+        - "1433:1433"
     networks:
       - backend
     volumes:
