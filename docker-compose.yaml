@@ -1,3 +1,5 @@
+name: limb
+
 services:
   web:
     restart: always

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import {useEffect} from 'react';
+import { useEffect } from "react";
 
 function DisableContextMenu() {
   useEffect(() => {
@@ -8,10 +8,10 @@ function DisableContextMenu() {
       event.preventDefault();
     };
 
-    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener("contextmenu", handleContextMenu);
 
     return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener("contextmenu", handleContextMenu);
     };
   }, []);
 
