@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Dtos.PlanStep;
 using TaskTracker.Dtos.PlanStep;
 using TaskTracker.Models;
 
@@ -25,6 +26,13 @@ namespace TaskTracker.Mappers
         {
             StepNumber = planStepDto.StepNumber
         };
+       }
+       public static PlanStep ToPlanStepFromUpdateDto(this UpdatePlanStepRequestDto planStepDto)
+       {
+          return new PlanStep
+          {
+            StepNumber = planStepDto.StepNumber
+          };
        }
     }
 }

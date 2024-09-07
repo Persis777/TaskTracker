@@ -20,5 +20,7 @@ namespace TaskTracker.Models
        public string Status { get; set;}
 
        public Plan Plan { get; set;}
+
+       public int? PlanId { get; set; }
     }
 }

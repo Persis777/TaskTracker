@@ -14,7 +14,7 @@ namespace TaskTracker.Models
        public int UserTaskId { get; set; }       
        public UserTask UserTask { get; set; }
 
-       public ICollection<PlanStep> Steps { get; set;}
+       public List<PlanStep> Steps { get; set;} = new List<PlanStep>();
 
 
     }

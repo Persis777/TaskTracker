@@ -30,8 +30,9 @@ namespace TaskTracker.Controllers
       [HttpGet("{id}")]
       public async Task<ActionResult<UserTask>> GetUserTaskById([FromRoute] int id)
       {
-          var userTask = await _context.UserTasks.FindAsync(id);
-
+          var userTask = await _context.UserTasks //.FindAsync(id);
+          .Include(ut => ut.Plan)
+          .FirstOrDefaultAsync(ut => ut.Id == id);
           if (userTask == null)
           {
             return NotFound();

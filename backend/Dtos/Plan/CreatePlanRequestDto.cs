@@ -10,7 +10,7 @@ namespace TaskTracker.Dtos.Plan
     {
     public string Title { get; set; }
     public DateTime CreationDate { get; set; }
-
+    public int UserTaskId { get; set;}
     public ICollection<CreatePlanStepRequestDto> Steps { get; set; }
     }
 }

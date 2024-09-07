@@ -22,5 +22,7 @@ namespace TaskTracker.Dtos.UserTask
        public string Status { get; set;}
 
        public PlanDto Plan { get; set;}
+
+        public int PlanId { get; set; }
     }
 }
