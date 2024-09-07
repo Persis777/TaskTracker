@@ -1,3 +1,24 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "airbnb",
+    "next/core-web-vitals",
+    "next/typescript",
+    "next",
+    "plugin:@next/next/recommended",
+    "prettier",
+    "eslint:recommended"
+  ],
+  "rules": {
+    "import/no-extraneous-dependencies": "off",
+    "import/extensions": "off",
+    "react/button-has-type": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ]
+  }
 }
