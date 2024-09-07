@@ -56,9 +56,11 @@ namespace backend.Controllers
 
           _context.Plans.Add(newPlan);
 
+          await _context.SaveChangesAsync();
+
           userTask.PlanId = newPlan.Id;
           _context.UserTasks.Update(userTask);
-
+ 
           await _context.SaveChangesAsync();
 
           return CreatedAtAction(nameof(GetPlanByUserTaskId),new {userTaskId = newPlan.UserTaskId}, newPlan.ToPlanDto());
