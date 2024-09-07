@@ -2,17 +2,18 @@
 
 import LIInput from '@/app/ui/LIInput';
 import LITextArea from '@/app/ui/LITextArea';
-import api from '@/api';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import PriorityLevels from '@/app/task/PriorityLevels';
 import TaskStatusSelector from '@/app/task/TaskStatusSelector';
+import { TTaskStatus } from '@/models/Task';
+import api from '../../api';
 
 export default function TaskDetail() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<'High' | 'Medium' | 'Low'>('Low');
-  const [status, setStatus] = useState<'InProgress' | 'Completed' | 'Pending'>('Pending');
+  const [status, setStatus] = useState<TTaskStatus>('Pending');
 
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams!.toString());
@@ -27,6 +28,12 @@ export default function TaskDetail() {
         priority,
         status
       });
+    }
+  };
+
+  const deleteTask = async () => {
+    if (id) {
+      await api.task.deleteById(Number(id));
     }
   };
 
@@ -49,7 +56,7 @@ export default function TaskDetail() {
                onInput={(e: any) => setTitle(e.target.value as string)}
                label="Title task" placeholder="Complete some..." id="title"/>
       <PriorityLevels value={priority} onClick={e => setPriority(e)}/>
-      <TaskStatusSelector onStatusChange={(e) => setStatus(e)} value={status}/>
+      <TaskStatusSelector onStatusChange={(e: TTaskStatus) => setStatus(e)} value={status}/>
     </div>
     <div className="p-2">
       <LITextArea
@@ -59,11 +66,17 @@ export default function TaskDetail() {
         placeholder="Write description about task" id="description"/>
     </div>
 
-    <div className="p-2">
+    <div className="p-2 flex gap-10">
       <button
         onClick={updateTask}
-        className="bg-gray-600 text-sm shadow-md py-1 items-center gap-4 flex justify-center w-full">
+        className="bg-gray-600 text-sm shadow-md py-1 items-center gap-4 flex justify-center rounded w-full">
         Save
+      </button>
+
+      <button
+        onClick={deleteTask}
+        className="bg-red-600 text-sm shadow-md py-1 items-center gap-4 flex justify-center rounded w-full">
+        Delete
       </button>
     </div>
   </div>);

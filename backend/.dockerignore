@@ -6,4 +6,4 @@ scripts
 *Dockerfile*
 node_modules
 .env
-out
+/.out

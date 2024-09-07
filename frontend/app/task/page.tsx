@@ -2,12 +2,12 @@
 
 import React, { useEffect } from 'react';
 import TaskItem from '@/app/task/TaskItem';
-import api from '@/api';
 import { GoPaste } from 'react-icons/go';
 
 import { ITask } from '@/models/Task';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import api from '../../api';
 
 function TaskList() {
   const router = useRouter();

@@ -1,14 +1,14 @@
 'use client';
 
-import api from '@/api';
 import { ITask } from '@/models/Task';
 import { GoPencil, GoTrash } from 'react-icons/go';
+import api from '../../api';
 
 export default function ActionButtons({
   task
 }: { task: ITask }) {
   const deleteTask = async () => {
-    await api.task.deleteTask(task.id!);
+    await api.task.deleteById(task.id!);
   };
 
   return (<div className="flex gap-2 justify-end">
