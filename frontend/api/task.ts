@@ -2,7 +2,7 @@ import formatRequest from '@/utils/request';
 import { ITask } from '@/models/Task';
 import { AxiosResponse } from 'axios';
 
-export const getTasks = (): Promise<AxiosResponse<ITask[]>> => formatRequest({
+export const getTasks = () => formatRequest({
   url: '/task',
   method: 'get'
 });

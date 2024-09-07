@@ -4,7 +4,11 @@ import { AxiosResponse } from 'axios';
 
 const formatRequest = <T>(
   request: ApiRequest,
-  payload?: unknown
-): Promise<AxiosResponse<T>> => axios[request.method](request.url, payload);
+  payload?: any
+): Promise<AxiosResponse<T>> => axios[request.method](request.url, payload)
+  .then((response) => response)
+  .catch((error) => {
+    throw error;
+  });
 
 export default formatRequest;

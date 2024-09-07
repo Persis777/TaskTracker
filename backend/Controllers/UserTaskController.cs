@@ -11,7 +11,7 @@ using TaskTracker.Models;
 
 namespace TaskTracker.Controllers
 {
-    [Route("api/user")]
+    [Route("api/task")]
     [ApiController]
     public class UserTaskController : ControllerBase
     {

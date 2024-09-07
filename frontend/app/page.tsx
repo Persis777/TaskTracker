@@ -1,21 +1,28 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import TaskList from '@/components/TaskList';
-import api from '@/api';
+import axios from '@/utils/axios';
 
-export default async function Home() {
-  let tasks;
-  try {
-    console.log('Fetching tasks...');
+export default function Home() {
+  const [tasks, setTasks] = React.useState([]);
 
-    const response = await api.task.getTasks();
-    tasks = response.data;
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
-  }
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get('/task');
+      setTasks(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <div className="min-h-screen">
-      <TaskList tasks={tasks}/>
+      {tasks.length && <TaskList tasks={tasks}/>}
     </div>
   );
 }
