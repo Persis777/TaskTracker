@@ -14,14 +14,14 @@ export interface IPlan {
   steps: IStep[];
 }
 
-export type TTaskStatus = 'InProgress' | 'Completed' | 'Pending';
+export type TTaskStatus = "InProgress" | "Completed" | "Pending";
 
 export interface ITask {
-  id?: number | undefined;
+  id?: number | string | undefined;
   title: string;
   description: string;
   deadline: string;
-  priority: 'High' | 'Medium' | 'Low';
+  priority: "High" | "Medium" | "Low";
   status: TTaskStatus;
   plan?: IPlan;
 }

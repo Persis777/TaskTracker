@@ -3,8 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/app/Header";
 import React from "react";
-import ContextMenu from "@/app/ContextMenu";
-import Footer from "@/app/Footer";
+import Sidenav from "@/app/Sidenav";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,12 +30,13 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
       >
-        <ContextMenu />
+        <Sidenav />
         <Header />
-        {children}
-        <Footer />
+        <div className="flex-1 pl-64 pt-16 min-h-screen bg-gray-900 flex flex-col justify-center">
+          {children}
+        </div>
       </body>
     </html>
   );

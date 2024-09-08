@@ -1,61 +1,57 @@
-"use client";
-
-import React, { useEffect } from "react";
+import React from "react";
 import TaskItem from "@/app/task/TaskItem";
 import { GoPaste } from "react-icons/go";
+import api from "@/api";
+import { createTask } from "@/app/task/utils/createTask";
 
-import { ITask } from "@/models/Task";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import api from "../../api";
+export default async function Page() {
+  const { data: tasks } = await api.task.getAll();
+  const newId = tasks.length + 1;
 
-function TaskList() {
-  const router = useRouter();
-  const [tasks, setTasks] = React.useState<ITask[]>([]);
-  const TaskDetail = dynamic(() => import("@/app/task/TaskDetail"));
+  const handlerCreateTask = async () => {
+    "use server";
 
-  const emptyTask = {
-    title: "string",
-    description: "string",
-    deadline: "2024-09-07T08:01:19.923Z",
-    priority: "string",
-    status: "string",
+    await createTask(newId);
   };
-
-  const getTasks = async () => {
-    const { data } = await api.task.getAll();
-    setTasks(data);
-  };
-  const createTask = async () => {
-    const { data } = await api.task.create(emptyTask as ITask);
-    if (data.id) router.push(`/task?id=${data.id}`);
-    await getTasks();
-  };
-
-  useEffect(() => {
-    getTasks();
-  }, []);
 
   return (
-    <section className="w-full flex flex-shrink-0 ">
-      <div className="w-1/5 bg-gray-700 ml-4 mt-4">
-        <ul className="space-y-1 mx-2 py-1 overflow-hidden">
-          <button
-            onClick={createTask}
-            className="bg-gray-600 text-sm shadow-md py-1 items-center gap-4 flex justify-center w-full"
-          >
-            <GoPaste /> New
-          </button>
-          {tasks
-            .map((task) => <TaskItem task={task} key={task.id} />)
-            .reverse()}
+    <div className="flex flex-grow mt-auto h-full">
+      <div className="w-full bg-gray-800 flex-shrink-0 h-full rounded-lg pt-20 px-2 shadow-lg">
+        <form>
+          <div className="mb-4">
+            <input
+              name="text"
+              type="text"
+              placeholder="Filter by name or description"
+              className="w-full p-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="mb-4">
+            <select
+              name="priority"
+              className="w-full p-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="priority">Sort by Priority</option>
+              <option value="deadline">Sort by End Date</option>
+            </select>
+          </div>
+        </form>
+        <ul className="space-y-2 h-full overflow-auto">
+          <form action={handlerCreateTask}>
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white text-sm shadow-md py-2 flex items-center gap-4 justify-center w-full rounded-lg transition-transform duration-200"
+            >
+              <GoPaste /> <span>New</span>
+            </button>
+          </form>
+
+          {tasks.reverse().map((task) => (
+            <TaskItem task={task} key={task.id} />
+          ))}
         </ul>
       </div>
-      <div className="w-full">
-        <TaskDetail />
-      </div>
-    </section>
+    </div>
   );
 }
-
-export default TaskList;
