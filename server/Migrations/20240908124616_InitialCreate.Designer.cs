@@ -12,7 +12,7 @@ using TaskTracker.Data;
 namespace TaskTracker.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240907005014_InitialCreate")]
+    [Migration("20240908124616_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -59,11 +59,15 @@ namespace TaskTracker.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StepNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

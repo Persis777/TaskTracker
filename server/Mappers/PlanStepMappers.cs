@@ -16,22 +16,25 @@ namespace TaskTracker.Mappers
          {
             Id = planStepModel.Id,
             PlanId = planStepModel.PlanId,
-            StepNumber = planStepModel.StepNumber
+            Text = planStepModel.Text,          
+            Order = planStepModel.Order
          };
        }
 
        public static PlanStep ToPlanStepFromCreateDto(this CreatePlanStepRequestDto planStepDto)
        {
         return new PlanStep
-        {
-            StepNumber = planStepDto.StepNumber
+        {          
+            Order = planStepDto.Order,          
+            Text = planStepDto.Text
         };
        }
        public static PlanStep ToPlanStepFromUpdateDto(this UpdatePlanStepRequestDto planStepDto)
        {
           return new PlanStep
-          {
-            StepNumber = planStepDto.StepNumber
+          {          
+            Order = planStepDto.Order,
+            Text = planStepDto.Text
           };
        }
     }

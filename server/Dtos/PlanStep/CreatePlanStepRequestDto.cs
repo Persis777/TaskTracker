@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 namespace TaskTracker.Dtos.PlanStep
 {
     public class CreatePlanStepRequestDto
-    {
-        public int StepNumber { get; set;}
+    {        
+       
+
+         public string Text{ get; set; }
+         public int PlanId { get; set; }
+           public int Order {get; set;}
     }
 }

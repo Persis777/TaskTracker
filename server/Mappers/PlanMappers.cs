@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskTracker.Dtos.Plan;
+using TaskTracker.Dtos.PlanStep;
 using TaskTracker.Models;
 
 namespace TaskTracker.Mappers
@@ -16,7 +17,13 @@ namespace TaskTracker.Mappers
             Id = planModel.Id,
             Title = planModel.Title,
             CreationDate = planModel.CreationDate,
-            Steps = planModel.Steps?.Select(step => step.ToPlanStepDto()).ToList()
+            Steps = planModel.Steps?.Select(step => new PlanStepDto
+            {
+              PlanId = step.PlanId,
+              Id = step.Id,           
+              Text =  step.Text,
+              Order = step.Order
+            }).ToList()
          };
        }
        public static Plan ToPlanFromCreateDto(this CreatePlanRequestDto planDto)

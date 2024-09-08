@@ -9,6 +9,9 @@ namespace TaskTracker.Dtos.PlanStep
     {
         public int Id { get; set;}
         public int PlanId { get; set; }
-        public int StepNumber { get; set;}
+
+         public string Text{ get; set; }
+
+         public int Order {get; set;}
     }
 }

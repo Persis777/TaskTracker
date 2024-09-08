@@ -10,4 +10,5 @@ To start the project and build the necessary images, use the following command:
 
 ```bash
 docker-compose up --build -d
+npm run start:db
 ```

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Dtos.Plan;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using server.Interfaces;
 using TaskTracker.Data;
 using TaskTracker.Dtos.Plan;
 using TaskTracker.Mappers;
@@ -15,100 +16,82 @@ namespace backend.Controllers
     [ApiController]
     public class PlanController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-       public PlanController(ApplicationDBContext context)
+        private readonly IPlanRepository _planRepo;  
+        private readonly ApplicationDBContext _context;      
+       public PlanController(IPlanRepository planRepo,ApplicationDBContext context)
        {
+          _planRepo = planRepo;
           _context = context;
        }
 
        [HttpGet("user/{userTaskId}")]
        public async Task<ActionResult<PlanDto>> GetPlanByUserTaskId([FromRoute] int userTaskId)
        {
-          var plan = _context.Plans
-          .Include(p => p.Steps)
-          .FirstOrDefault(i => i.UserTaskId == userTaskId);
+          var planDto = await _planRepo.GetPlanByUserTaskIdAsync(userTaskId);
 
-          if (plan == null)
+          if (planDto == null)
           {
             return NotFound($"Not plan found for UserTaskId: {userTaskId}");
           }
-          return Ok(plan.ToPlanDto());
+          return Ok(planDto);
        }
 
        [HttpPost]
        public async Task<ActionResult<PlanDto>> CreatePlan([FromBody] CreatePlanRequestDto createPlanRequest)
        {
-          var userTask = await _context.UserTasks //.FindAsync(createPlanRequest.UserTaskId);
-          .Include(ut => ut.Plan)
-          .FirstOrDefaultAsync(ut => ut.Id == createPlanRequest.UserTaskId); 
-
-          if (userTask == null)
+          if(!ModelState.IsValid)
           {
-            return BadRequest("UserTask not found");
-          }       
-          if (userTask.Plan != null)
-          {
-            return Conflict(new {Message = "UserTask already has a plan", ExistingPlan = userTask.Plan.ToPlanDto() });
+            return BadRequest(ModelState);
           }
 
-          var newPlan = createPlanRequest.ToPlanFromCreateDto();
-          newPlan.UserTaskId = createPlanRequest.UserTaskId;
+          var planDto = await _planRepo.CreatePlanAsync(createPlanRequest);
 
-          _context.Plans.Add(newPlan);
+          if (planDto == null)
+          {
+            var userTask = await _context.UserTasks.FindAsync(createPlanRequest.UserTaskId);
+            if (userTask?.Plan != null)
+            {
+              return Conflict(new { Message = "UserTask already has a plan"});
+            }
 
-          await _context.SaveChangesAsync();
+            return NotFound(new { Message = "UserTask not found, or it's already has a plan"});
+          }
 
-          userTask.PlanId = newPlan.Id;
-          _context.UserTasks.Update(userTask);
- 
-          await _context.SaveChangesAsync();
-
-          return CreatedAtAction(nameof(GetPlanByUserTaskId),new {userTaskId = newPlan.UserTaskId}, newPlan.ToPlanDto());
+          return CreatedAtAction(nameof(GetPlanByUserTaskId),new {userTaskId = createPlanRequest.UserTaskId}, planDto);
        }
        
-       [HttpPut("{id}")]
+       [HttpPut]
+       [Route("{id}")]
 
        public async Task<ActionResult> UpdatePlan([FromRoute] int id,[FromBody] UpdatePlanRequestDto updatePlanRequestDto)
        {
-          var plan = await _context.Plans
-          .Include(p => p.Steps)
-          .FirstOrDefaultAsync(p => p.Id == id);
-          
-          if (plan == null)
+          if(!ModelState.IsValid)
+          {
+            return BadRequest(ModelState);
+          }
+
+          var planDto = await _planRepo.UpdatePlanAsync(id,updatePlanRequestDto);
+
+          if (planDto == null)
           {
             return NotFound();
           }
 
-          if(!string.IsNullOrEmpty(updatePlanRequestDto.Title))
-          {
-            plan.Title = updatePlanRequestDto.Title;
-          }
-
-          if(updatePlanRequestDto.Steps != null && updatePlanRequestDto.Steps.Any())
-          {
-            plan.Steps.Clear();
-            plan.Steps = updatePlanRequestDto.Steps.Select(stepDto => stepDto.ToPlanStepFromUpdateDto()).ToList();
-          }
-
-          await _context.SaveChangesAsync();
-
-          return NoContent();
+          return Ok(planDto);
 
        }
 
-       [HttpDelete("{id}")]
+       [HttpDelete]
+       [Route("{id}")]
 
        public async Task<ActionResult> DeletePlan([FromRoute] int id)
        {
-          var plan = await _context.Plans.FindAsync(id);
+          var success = await _planRepo.DeletePlanAsync(id);
 
-          if (plan == null)
+          if (!success)
           {
             return NotFound();
           }
-
-          _context.Plans.Remove(plan);
-          await _context.SaveChangesAsync();
 
           return NoContent();
        }

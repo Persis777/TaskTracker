@@ -15,6 +15,7 @@ namespace TaskTracker.Mappers
         {
            return null;
         }
+        var planDto = userTaskModel.Plan?.ToPlanDto();
         return new UserTaskDto
         {
           Id = userTaskModel.Id, 
@@ -23,7 +24,8 @@ namespace TaskTracker.Mappers
           Deadline = userTaskModel.Deadline,
           Priority = userTaskModel.Priority,
           Status = userTaskModel.Status,
-          Plan = userTaskModel.Plan?.ToPlanDto()
+          Plan = planDto,
+        
         };
       }
 

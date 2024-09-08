@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using server.Interfaces;
 using TaskTracker.Data;
 using TaskTracker.Dtos.UserTask;
 using TaskTracker.Mappers;
@@ -15,70 +16,63 @@ namespace TaskTracker.Controllers
     [ApiController]
     public class UserTaskController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-        public UserTaskController(ApplicationDBContext context)
+      private readonly IUserTaskRepository _userTaskRepo;
+        public UserTaskController(IUserTaskRepository userTaskRepo)
         {
-            _context = context;
+          _userTaskRepo = userTaskRepo ?? throw new ArgumentNullException(nameof(userTaskRepo));
         }
+
       [HttpGet]
       public async  Task<ActionResult<IEnumerable<UserTaskDto>>> GetUserTasks()
       {
-        var UserTask = await _context.UserTasks
-        .Include(ut => ut.Plan)
-        .Select(s => s.ToUserTaskDto())
-        .ToListAsync();
-
-        return Ok(UserTask);
+        var userTasks = await _userTaskRepo.GetAllTasksAsync();
+        return Ok(userTasks);
       }
 
-      [HttpGet("{id}")]
+      [HttpGet]
+      [Route("{id}")]
       public async Task<ActionResult<UserTaskDto>> GetUserTaskById([FromRoute] int id)
       {
-          var userTask = await _context.UserTasks //.FindAsync(id);
-          .Include(ut => ut.Plan)
-          .FirstOrDefaultAsync(ut => ut.Id == id);
-          if (userTask == null)
+          var userTask = await _userTaskRepo.GetTaskByIdAsync(id);
+          if( userTask == null)
           {
             return NotFound();
           }
-          return Ok(userTask.ToUserTaskDto());
+          return Ok(userTask);
       }
-      [HttpPost]
-       public async Task<ActionResult<UserTaskDto>> CreateUserTask([FromBody] CreateUserTaskRequestDto userTaskDto)
-       {
-          if (userTaskDto == null)
-          {
-            return BadRequest("Invalid data.");
+     [HttpPost]
+      public async Task<ActionResult<UserTaskDto>> CreateUserTask([FromBody] CreateUserTaskRequestDto userTaskDto)
+      {
+          if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+         }
+
+             
+
+   
+            var createdUserTask = await _userTaskRepo.CreateTaskAsync(userTaskDto);
+
+    
+          return CreatedAtAction(nameof(GetUserTaskById), new { id = createdUserTask.Id }, createdUserTask);
           }
-
-          var userTask = userTaskDto.ToUserTaskFromCreateDto();
-
-          _context.UserTasks.Add(userTask);
-          await _context.SaveChangesAsync();
-
-          var toUserTaskDto = userTask.ToUserTaskDto();
-
-          return CreatedAtAction(nameof(GetUserTaskById), new {id = userTask.Id}, toUserTaskDto);
-       }
 
        [HttpPut]
        [Route("{id}")]
        public async Task<ActionResult> UpdateUserTask([FromRoute] int id,[FromBody] UpdateUserTaskRequestDto updateDto)
        {
-          var userTaskModel = await _context.UserTasks.FindAsync(id);
-
-          if(userTaskModel == null)
+          
+         if (!ModelState.IsValid)
+         {
+           return BadRequest(ModelState);
+         }
+          
+          var result = await _userTaskRepo.UpdateTaskAsync(id, updateDto);
+          if (result == null)
           {
             return NotFound();
           }
 
-          userTaskModel.Title = updateDto.Title;
-          userTaskModel.Description = updateDto.Description;
-          userTaskModel.Deadline = updateDto.Deadline;
-          userTaskModel.Priority = updateDto.Priority;
-          userTaskModel.Status = updateDto.Status;
-
-          await _context.SaveChangesAsync();
 
           return NoContent();
        }
@@ -86,19 +80,17 @@ namespace TaskTracker.Controllers
        [HttpDelete]
        [Route("{id}")]
 
-       public async Task<ActionResult> DeleteUserTask([FromRoute] int id)
+       public async Task<bool> DeleteUserTask([FromRoute] int id)
        {
-         var userTaskModel = await _context.UserTasks.FindAsync(id);
+         var result = await _userTaskRepo.DeleteTaskAsync(id);
 
-         if(userTaskModel == null)
+         if(result == null)
          {
-            return NotFound();
+          return false;
          }
 
-         _context.Remove(userTaskModel);
-         await _context.SaveChangesAsync();
 
-         return NoContent();
+         return true;
        }
     }
 }

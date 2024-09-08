@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskTracker.Dtos.Plan;
+using TaskTracker.Dtos.PlanStep;
 using TaskTracker.Models;
 
 namespace TaskTracker.Dtos.UserTask
@@ -23,6 +24,7 @@ namespace TaskTracker.Dtos.UserTask
 
        public PlanDto Plan { get; set;}
 
-        public int PlanId { get; set; }
+      // public int PlanId { get; set; }
+       
     }
 }
