@@ -1,4 +1,4 @@
-import * as task from './task';
+import * as task from "./task";
 
 const api = {
   task,
