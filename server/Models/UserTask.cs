@@ -22,5 +22,7 @@ namespace TaskTracker.Models
        public Plan Plan { get; set;}
 
        public int? PlanId { get; set; }
+
+       public string AppUserId { get; set; }
     }
 }

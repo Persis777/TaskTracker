@@ -38,6 +38,7 @@ namespace TaskTracker.Mappers
            Deadline = userTaskDto.Deadline,
            Priority = userTaskDto.Priority,
            Status = userTaskDto.Status,
+           AppUserId = userTaskDto.AppUserId,
           // Plan = userTaskDto.Plan?.ToPlanFromCreateDto()
         };
       }

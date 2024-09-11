@@ -18,6 +18,8 @@ namespace TaskTracker.Dtos.UserTask
 
        public string Status { get; set;}
 
+       public string AppUserId { get; set; }
+
       // public CreatePlanRequestDto Plan { get; set;}
     }
 }

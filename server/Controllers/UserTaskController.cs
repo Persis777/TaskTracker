@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using server.Extensions;
 using server.Interfaces;
+using server.Models;
 using TaskTracker.Data;
 using TaskTracker.Dtos.UserTask;
 using TaskTracker.Mappers;
@@ -17,15 +21,22 @@ namespace TaskTracker.Controllers
     public class UserTaskController : ControllerBase
     {
       private readonly IUserTaskRepository _userTaskRepo;
-        public UserTaskController(IUserTaskRepository userTaskRepo)
+      private readonly UserManager<AppUser> _userManager;
+        public UserTaskController(IUserTaskRepository userTaskRepo,UserManager<AppUser> userManager)
         {
           _userTaskRepo = userTaskRepo ?? throw new ArgumentNullException(nameof(userTaskRepo));
+          _userManager = userManager;
         }
 
       [HttpGet]
-      public async  Task<ActionResult<IEnumerable<UserTaskDto>>> GetUserTasks()
+      [Authorize]
+      public async  Task<IActionResult> GetUserTasks()
       {
-        var userTasks = await _userTaskRepo.GetAllTasksAsync();
+        var username = User.GetUsername();
+        var appUser = await _userManager.FindByNameAsync(username);
+        var userTasks = await _userTaskRepo.GetAllUserTasksAsync(appUser);
+
+
         return Ok(userTasks);
       }
 
@@ -41,16 +52,21 @@ namespace TaskTracker.Controllers
           return Ok(userTask);
       }
      [HttpPost]
-      public async Task<ActionResult<UserTaskDto>> CreateUserTask([FromBody] CreateUserTaskRequestDto userTaskDto)
+     [Authorize]
+      public async Task<ActionResult> AddTask([FromBody] CreateUserTaskRequestDto userTaskDto)
       {
           if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
          }
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
 
-             
-
-   
+            if (appUser == null)
+            {
+                    return Unauthorized(); 
+            }
+            userTaskDto.AppUserId = appUser.Id;
             var createdUserTask = await _userTaskRepo.CreateTaskAsync(userTaskDto);
 
     
@@ -80,17 +96,21 @@ namespace TaskTracker.Controllers
        [HttpDelete]
        [Route("{id}")]
 
-       public async Task<bool> DeleteUserTask([FromRoute] int id)
+       public async Task<IActionResult> DeleteUserTask([FromRoute] int id)
        {
-         var result = await _userTaskRepo.DeleteTaskAsync(id);
+        var username = User.GetUsername();
+        var appUser = await _userManager.FindByNameAsync(username);
 
-         if(result == null)
+         var result = await _userTaskRepo.DeleteTaskAsync(id, appUser.Id);
+
+         if(result)
          {
-          return false;
+          return Ok();
          }
-
-
-         return true;
+         else
+         {
+          return NotFound();
+         }         
        }
     }
 }

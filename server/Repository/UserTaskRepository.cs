@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using server.Interfaces;
+using server.Models;
 using TaskTracker.Data;
 using TaskTracker.Dtos.UserTask;
 using TaskTracker.Mappers;
@@ -23,13 +24,16 @@ namespace server.Repository
         {   
             var userTask = userTaskDto.ToUserTaskFromCreateDto();     
             _context.UserTasks.Add(userTask);
+           
             await _context.SaveChangesAsync();
             return userTask.ToUserTaskDto();
         }
 
-        public async Task<bool> DeleteTaskAsync(int id)
+        public async Task<bool> DeleteTaskAsync(int taskId, string appUserId)
         {
-           var userTask = await _context.UserTasks.FindAsync(id);
+           var userTask = await _context.UserTasks
+           .Where(ut => ut.Id == taskId && ut.AppUserId == appUserId)
+           .FirstOrDefaultAsync();
 
            if(userTask == null)
            {
@@ -41,9 +45,10 @@ namespace server.Repository
            return true;
         }
 
-        public async Task<IEnumerable<UserTaskDto>> GetAllTasksAsync()
+        public async Task<IEnumerable<UserTaskDto>> GetAllUserTasksAsync(AppUser user)
         {
             return await _context.UserTasks
+                .Where(u => u.AppUserId == user.Id)
                .Include(ut => ut.Plan)
                .ThenInclude(p => p.Steps)
                .Select(s => s.ToUserTaskDto())
