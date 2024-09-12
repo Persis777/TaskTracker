@@ -16,5 +16,7 @@ namespace TaskTracker.Dtos.UserTask
        public string Priority { get; set; }
 
        public string Status { get; set;}
+
+     
     }
 }

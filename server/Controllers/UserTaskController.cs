@@ -75,15 +75,18 @@ namespace TaskTracker.Controllers
 
        [HttpPut]
        [Route("{id}")]
-       public async Task<ActionResult> UpdateUserTask([FromRoute] int id,[FromBody] UpdateUserTaskRequestDto updateDto)
+       [Authorize]
+       public async Task<ActionResult> UpdateUserTask([FromBody] UpdateUserTaskRequestDto updateDto,[FromRoute] int id)
        {
           
          if (!ModelState.IsValid)
          {
            return BadRequest(ModelState);
          }
-          
-          var result = await _userTaskRepo.UpdateTaskAsync(id, updateDto);
+          var username = User.GetUsername();
+          var appUser = await _userManager.FindByNameAsync(username);
+          var result = await _userTaskRepo.UpdateTaskAsync(updateDto,id, appUser);
+
           if (result == null)
           {
             return NotFound();

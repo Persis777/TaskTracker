@@ -13,7 +13,7 @@ namespace server.Interfaces
        Task<IEnumerable<UserTaskDto>> GetAllUserTasksAsync(AppUser user);
        Task<UserTaskDto> GetTaskByIdAsync(int id);
        Task<UserTaskDto> CreateTaskAsync(CreateUserTaskRequestDto userTask);
-       Task<UserTaskDto> UpdateTaskAsync(int id, UpdateUserTaskRequestDto updateDto);
+       Task<UserTaskDto> UpdateTaskAsync(UpdateUserTaskRequestDto updateDto,int taskId,AppUser user);
        Task<bool> DeleteTaskAsync(int id,string appUserId);
     }
 }

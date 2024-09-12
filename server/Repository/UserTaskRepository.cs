@@ -66,9 +66,11 @@ namespace server.Repository
             return userTask?.ToUserTaskDto();
         }
 
-        public async Task<UserTaskDto> UpdateTaskAsync(int id, UpdateUserTaskRequestDto updateDto)
+        public async Task<UserTaskDto> UpdateTaskAsync(UpdateUserTaskRequestDto updateDto,int taskId, AppUser user)
         {
-            var userTask = await _context.UserTasks.FindAsync(id);
+            var userTask = await _context.UserTasks
+            .Where(ut => ut.Id == taskId && ut.AppUserId == user.Id)
+            .FirstOrDefaultAsync();
 
             if(userTask == null)
             {
