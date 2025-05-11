@@ -16,6 +16,7 @@ namespace TaskTracker.Data
         public DbSet<UserTask> UserTasks { get; set; }
         public DbSet<Plan> Plans { get; set; }
         public DbSet<PlanStep> PlanSteps { get; set; }
+        public DbSet<UserRecommendation> UserRecommendations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +47,12 @@ namespace TaskTracker.Data
                 .HasOne(ps => ps.Plan)
                 .WithMany(p => p.Steps)
                 .HasForeignKey(ps => ps.PlanId);
+
+            // Configure User-Recommendation relationship
+            modelBuilder.Entity<UserRecommendation>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId);
         }
     }
 }

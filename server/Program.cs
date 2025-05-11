@@ -9,6 +9,7 @@ using server.Models;
 using server.Repository;
 using server.Service;
 using TaskTracker.Data;
+using TaskTracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,7 @@ builder.Services.AddScoped<IUserTaskRepository, UserTaskRepository>();
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<IPlanStepRepository, PlanStepRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<RecommendationService>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {

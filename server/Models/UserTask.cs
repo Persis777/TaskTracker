@@ -24,5 +24,9 @@ namespace TaskTracker.Models
        public int? PlanId { get; set; }
 
        public string AppUserId { get; set; }
+
+       public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+       public bool IsCompleted { get; set; }
     }
 }
